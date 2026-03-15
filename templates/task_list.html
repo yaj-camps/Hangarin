@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hangarin - Tasks{% endblock %}
+{% block nav_task %}active{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <h4 class="page-title">Tasks</h4>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">List of Tasks</div>
+            <div class="card-category">Manage your tasks</div>
+          </div>
+          <br />
+          <div class="col-md-12 row">
+            <div class="col-md-6">
+              <form class="navbar-left navbar-form nav-search mr-md-3" method="get" action="">
+                <div class="input-group">
+                  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search tasks..." class="form-control" />
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="la la-search search-icon"></i>
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-6">
+              <div class="pull-right">
+                <a href="{% url 'task-add' %}" class="btn btn-success btn-rounded">
+                  Add Task
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <table class="table table-striped mt-3">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Category</th>
+                  <th>Deadline</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for task in object_list %}
+                <tr>
+                  <td>{{ task.title }}</td>
+                  <td>{{ task.status }}</td>
+                  <td>{{ task.priority }}</td>
+                  <td>{{ task.category }}</td>
+                  <td>{{ task.deadline|date:"M d, Y"|default:"—" }}</td>
+                  <td>
+                    <a href="{% url 'task-detail' task.pk %}">View</a>
+                    <a href="{% url 'task-update' task.pk %}">Edit</a>
+                    <a href="{% url 'task-delete' task.pk %}" class="text-danger">Delete</a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" style="text-align: center">
+                    <p class="text-sm font-weight-bold mb-0">No Records Found</p>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% include 'includes/pagination.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

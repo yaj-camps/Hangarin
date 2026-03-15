@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hangarin - {{ task.title }}{% endblock %}
+{% block nav_task %}active{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <h4 class="page-title">Task Detail</h4>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">{{ task.title }}</div>
+            <div class="card-category">Task Information</div>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <tr>
+                <th>Status</th>
+                <td>{{ task.status }}</td>
+              </tr>
+              <tr>
+                <th>Priority</th>
+                <td>{{ task.priority }}</td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>{{ task.category }}</td>
+              </tr>
+              <tr>
+                <th>Deadline</th>
+                <td>{{ task.deadline|date:"M d, Y g:i A"|default:"Not set" }}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>{{ task.created_at|date:"M d, Y" }}</td>
+              </tr>
+              <tr>
+                <th>Updated</th>
+                <td>{{ task.updated_at|date:"M d, Y" }}</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>{{ task.description|default:"—" }}</td>
+              </tr>
+            </table>
+            <div class="form-group mt-3">
+              <a href="{% url 'task-update' task.pk %}" class="btn btn-primary btn-rounded">Edit</a>
+              <a href="{% url 'task-delete' task.pk %}" class="btn btn-danger btn-rounded">Delete</a>
+              <a href="{% url 'task-list' %}" class="btn btn-secondary btn-rounded">Back</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SubTasks -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">SubTasks</div>
+            <div class="card-category">Breakdown of this task</div>
+          </div>
+          <div class="card-body">
+            <div class="pull-right mb-3">
+              <a href="{% url 'subtask-add' task.pk %}" class="btn btn-success btn-rounded btn-sm">Add SubTask</a>
+            </div>
+            <table class="table table-striped mt-3">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for subtask in task.subtasks.all %}
+                <tr>
+                  <td>{{ subtask.title }}</td>
+                  <td>{{ subtask.status }}</td>
+                  <td>
+                    <a href="{% url 'subtask-update' subtask.pk %}">Edit</a>
+                    <a href="{% url 'subtask-delete' subtask.pk %}" class="text-danger">Delete</a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="3" style="text-align:center">
+                    <p class="text-sm font-weight-bold mb-0">No SubTasks Found</p>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Notes</div>
+            <div class="card-category">Notes for this task</div>
+          </div>
+          <div class="card-body">
+            <div class="pull-right mb-3">
+              <a href="{% url 'note-add' task.pk %}" class="btn btn-success btn-rounded btn-sm">Add Note</a>
+            </div>
+            {% for note in task.notes.all %}
+            <div class="card card-secondary mt-2">
+              <div class="card-body">
+                <p>{{ note.content }}</p>
+                <small class="text-muted">{{ note.created_at|date:"M d, Y" }}</small>
+                <a href="{% url 'note-delete' note.pk %}" class="text-danger pull-right"><i class="la la-trash"></i></a>
+              </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No notes yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
