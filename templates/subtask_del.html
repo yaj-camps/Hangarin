@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Hangarin - Delete SubTask{% endblock %}
+{% block nav_task %}active{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <h4 class="page-title">Delete SubTask</h4>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Delete SubTask</div>
+            <div class="card-category">This action cannot be undone</div>
+          </div>
+          <div class="col-md-10">
+            <div class="card-body">
+              <form action="" method="post" novalidate>
+                <p>Are you sure you want to delete "<strong>{{ object }}</strong>"?</p>
+                {% csrf_token %}
+                <div class="form-group">
+                  <div class="col-md-12 col-sm-3">
+                    <button type="submit" class="btn btn-danger btn-rounded">Yes, Delete</button>
+                    <a href="{% url 'task-detail' object.parent_task.pk %}" class="btn btn-secondary btn-rounded">Cancel</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
